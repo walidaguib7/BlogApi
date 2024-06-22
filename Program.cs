@@ -24,6 +24,7 @@ options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"))
 
 builder.Services.AddScoped<IFiles, FilesRepo>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICategory, CategoryRepo>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {

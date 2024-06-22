@@ -13,6 +13,7 @@ namespace BlogApi.Data
 
 
         public DbSet<FilesModel> file { get; set; }
+        public DbSet<Category> category { get; set; }
 
     }
 }
