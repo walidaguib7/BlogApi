@@ -16,7 +16,7 @@ namespace BlogApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+           
             var categories = await _categoryRepo.GetCategories();
             var category = categories.Select(c => c.ToCategoryDto());
             return Ok(category);
@@ -38,8 +38,8 @@ namespace BlogApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var category = categoryDto.ToCategoryModel();
             if (category == null) return NotFound();
-            var CategoryModel = await _categoryRepo.CreateCategory(category);
-            return CreatedAtAction(nameof(GetCategory), new { id = CategoryModel.Id }, CategoryModel.ToCategoryDto());
+             await _categoryRepo.CreateCategory(category);
+            return CreatedAtAction(nameof(GetCategory), new { id = category.Id },category.ToCategoryDto());
         }
 
         [HttpPut]
