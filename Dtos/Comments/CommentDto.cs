@@ -1,16 +1,19 @@
-﻿namespace BlogApi.Models
+﻿using BlogApi.Models;
+
+namespace BlogApi.Dtos.Comments
 {
-    public class Comment
+    public class CommentDto
     {
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string UserId { get; set; }
-        public User user { get; set; }
 
-        public int PostId { get; set; }
+        public string userName { get; set; }
         
-        public Post post { get; set; }
+        public int PostId { get; set; }
+
+        
     }
 }

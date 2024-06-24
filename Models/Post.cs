@@ -13,6 +13,6 @@
 
         public Category category { get; set; }
 
-        public List<Comment> comments { get; set; } = [];
+        public ICollection<Comment> comments { get; set; } = [];
     }
 }

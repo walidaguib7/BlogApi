@@ -3,6 +3,9 @@ using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using BlogApi.Models;
 
 namespace BlogApi.Controllers
 {

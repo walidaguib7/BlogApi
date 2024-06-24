@@ -26,6 +26,7 @@ builder.Services.AddScoped<IFiles, FilesRepo>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICategory, CategoryRepo>();
 builder.Services.AddScoped<IPost, PostRepo>();
+builder.Services.AddScoped<IComment, CommentRepo>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
