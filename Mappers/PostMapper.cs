@@ -15,6 +15,7 @@ namespace BlogApi.Mappers
                 username = post.user.UserName,
                 CategoryTitle = post.category.Title,
                 userpicture = post.user.files.Image,
+                Image = post.files.Image,
                 comments = post.comments.Select(c => c.ToCommentDto()).ToList()
             };
         }
@@ -27,6 +28,7 @@ namespace BlogApi.Mappers
                 Content = postDto.Content,
                 UserId = postDto.userId ,
                 CategoryId = postDto.categoryId,
+                FilesId =postDto.filesId
                 
             };
         }

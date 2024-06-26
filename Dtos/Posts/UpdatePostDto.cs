@@ -11,5 +11,7 @@ namespace BlogApi.Dtos.Posts
         [Required]
         public int categoryId { get; set; }
 
+        public int? filesId { get; set; }
+
     }
 }

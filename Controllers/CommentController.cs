@@ -1,4 +1,5 @@
 ﻿using BlogApi.Dtos.Comments;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using Microsoft.AspNetCore.Http;
@@ -13,9 +14,9 @@ namespace BlogApi.Controllers
         private readonly IComment _commentRepo = commentRepo;
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] CommentQuery query)
         {
-            var comments = await _commentRepo.GetComments();
+            var comments = await _commentRepo.GetComments(query);
             var comment = comments.Select(c => c.ToCommentDto());
             return Ok(comment);
         }
@@ -45,7 +46,7 @@ namespace BlogApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var comment = await _commentRepo.UpdateComment(id, commentDto);
             if (comment == null) return NotFound();
-            return Ok(comment.ToCommentDto());
+            return StatusCode(200,"Comment Updated Successfully");
         }
 
         [HttpDelete]

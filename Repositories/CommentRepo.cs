@@ -1,5 +1,6 @@
 ﻿using BlogApi.Data;
 using BlogApi.Dtos.Comments;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,31 +27,45 @@ namespace BlogApi.Repositories
             return comment;
         }
 
-        public Task<Comment?> GetComment(int id)
+        public async Task<Comment?> GetComment(int id)
         {
-            return context.comments
+            return await  context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
+                .Include(c => c.files )
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public Task<List<Comment>> GetComments()
+        public async Task<List<Comment>> GetComments(CommentQuery query)
         {
-            return context.comments
+            var comments = context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
-                .ToListAsync();
+                .Include(c => c.files)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("Id", StringComparison.OrdinalIgnoreCase))
+                {
+                    comments = query.IsDescending ? comments.OrderByDescending(s => s.Id) : comments.OrderBy(s => s.Id);
+                }
+            }
+
+            var skipNumber = (query.PageNumber - 1) * query.Limit;
+            return await comments.Skip(skipNumber).Take(query.Limit).ToListAsync();
         }
 
         public async Task<Comment?> UpdateComment(int id, UpdateCommentDto commentDto)
         {
             var comment = await context.comments
-                          .Include(c => c.user).Include(c => c.post)
+                          .Include(c => c.user).Include(c => c.post).Include(c => c.files)
                           .FirstOrDefaultAsync(c => c.Id == id);
             if (comment == null) return null;
 
             comment.Content = commentDto.Content;
             comment.UpdatedAt = DateTime.Today;
+            comment.FilesId = commentDto.FilesId;
             await context.SaveChangesAsync();
             return comment;
         }

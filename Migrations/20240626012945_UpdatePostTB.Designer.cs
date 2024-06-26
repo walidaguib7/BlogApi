@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240623030336_JJ")]
-    partial class JJ
+    [Migration("20240626012945_UpdatePostTB")]
+    partial class UpdatePostTB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,20 +47,25 @@ namespace BlogApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateOnly>("CreatedAt")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("FilesId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("UpdatedAt")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FilesId");
 
                     b.HasIndex("PostId");
 
@@ -97,15 +102,12 @@ namespace BlogApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateOnly?>("CreatedAt")
-                        .HasColumnType("date");
+                    b.Property<int>("FilesId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateOnly?>("UpdatedAt")
-                        .HasColumnType("date");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -114,6 +116,8 @@ namespace BlogApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("FilesId");
 
                     b.HasIndex("UserId");
 
@@ -331,6 +335,10 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Models.Comment", b =>
                 {
+                    b.HasOne("BlogApi.Models.FilesModel", "files")
+                        .WithMany()
+                        .HasForeignKey("FilesId");
+
                     b.HasOne("BlogApi.Models.Post", "post")
                         .WithMany("comments")
                         .HasForeignKey("PostId")
@@ -342,6 +350,8 @@ namespace BlogApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("files");
 
                     b.Navigation("post");
 
@@ -356,6 +366,12 @@ namespace BlogApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlogApi.Models.FilesModel", "files")
+                        .WithMany()
+                        .HasForeignKey("FilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BlogApi.Models.User", "user")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -363,6 +379,8 @@ namespace BlogApi.Migrations
                         .IsRequired();
 
                     b.Navigation("category");
+
+                    b.Navigation("files");
 
                     b.Navigation("user");
                 });

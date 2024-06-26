@@ -1,11 +1,8 @@
 ﻿using BlogApi.Dtos.Posts;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using BlogApi.Models;
 
 namespace BlogApi.Controllers
 {
@@ -16,9 +13,9 @@ namespace BlogApi.Controllers
         private readonly IPost _postRepo = postRepo;
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts()
+        public async Task<IActionResult> GetPosts([FromQuery] PostQuery query)
         {
-            var posts = await _postRepo.GetPosts();
+            var posts = await _postRepo.GetPosts(query);
             var post = posts.Select(p => p.ToPostDto());
             return Ok(post);
         }
@@ -38,7 +35,7 @@ namespace BlogApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var post = postDto.ToPostModel();
              await _postRepo.CreatePost(post);
-            return Ok(post.ToPostDto());
+            return StatusCode(200, "Post created successfully!");
         }
 
         [HttpPut]
@@ -48,7 +45,7 @@ namespace BlogApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var post = await _postRepo.UpdatePost(id, postDto);
             if (post == null) return NotFound();
-            return Ok(post.ToPostDto());
+            return StatusCode(200, "Post Updated successfully!");
         }
 
         [HttpDelete]

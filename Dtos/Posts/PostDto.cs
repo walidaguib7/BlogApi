@@ -15,6 +15,8 @@ namespace BlogApi.Dtos.Posts
 
         public string CategoryTitle { get; set; }
 
+        public string Image { get; set; }
+
         public ICollection comments { get; set; } 
     }
 }

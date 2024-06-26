@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240624002616_CommentMG")]
-    partial class CommentMG
+    [Migration("20240626012442_NewDB")]
+    partial class NewDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace BlogApi.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int?>("FilesId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
@@ -61,6 +64,8 @@ namespace BlogApi.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FilesId");
 
                     b.HasIndex("PostId");
 
@@ -97,6 +102,9 @@ namespace BlogApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("FilesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -108,6 +116,8 @@ namespace BlogApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("FilesId");
 
                     b.HasIndex("UserId");
 
@@ -325,6 +335,10 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Models.Comment", b =>
                 {
+                    b.HasOne("BlogApi.Models.FilesModel", "files")
+                        .WithMany()
+                        .HasForeignKey("FilesId");
+
                     b.HasOne("BlogApi.Models.Post", "post")
                         .WithMany("comments")
                         .HasForeignKey("PostId")
@@ -336,6 +350,8 @@ namespace BlogApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("files");
 
                     b.Navigation("post");
 
@@ -350,6 +366,10 @@ namespace BlogApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlogApi.Models.FilesModel", "files")
+                        .WithMany()
+                        .HasForeignKey("FilesId");
+
                     b.HasOne("BlogApi.Models.User", "user")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -357,6 +377,8 @@ namespace BlogApi.Migrations
                         .IsRequired();
 
                     b.Navigation("category");
+
+                    b.Navigation("files");
 
                     b.Navigation("user");
                 });

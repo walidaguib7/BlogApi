@@ -13,5 +13,7 @@ namespace BlogApi.Dtos.Posts
         public int categoryId { get; set; }
         [Required]
         public string userId { get; set; }
+        [Required]
+        public int filesId { get; set; }
     }
 }

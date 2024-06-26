@@ -16,8 +16,7 @@ namespace BlogApi.Mappers
                 PostId = comment.PostId,
                 UpdatedAt = comment.UpdatedAt,
                 userName = comment.user.UserName,
-                
-                
+                Image = comment.files.Image
             };
         }
 
@@ -29,7 +28,8 @@ namespace BlogApi.Mappers
                 CreatedAt = DateTime.Today,
                 UpdatedAt = null,
                 UserId = commentDto.UserId,
-                PostId = commentDto.PostId                
+                PostId = commentDto.PostId,
+                FilesId = commentDto.FilesId,
             };
         }
     }
