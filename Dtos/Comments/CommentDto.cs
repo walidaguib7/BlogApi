@@ -12,9 +12,8 @@ namespace BlogApi.Dtos.Comments
 
         public string userName { get; set; }
 
-        public string Image { get; set; }
 
-        public int PostId { get; set; }
+        
 
         
     }

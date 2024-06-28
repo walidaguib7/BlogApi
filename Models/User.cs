@@ -10,5 +10,12 @@ namespace BlogApi.Models
         public int  filesId { get; set; }
 
         public FilesModel files { get; set; }
+
+        
+
+        public ICollection<LikesModel> likes { get; set; } = [];
+
+
+
     }
 }

@@ -9,11 +9,11 @@
         public string UserId { get; set; }
 
         public int PostId { get; set; }
-        public int? FilesId { get; set; }
+
         public User user { get; set; }
 
         public Post post { get; set; }
 
-        public FilesModel files { get; set; }
+
     }
 }

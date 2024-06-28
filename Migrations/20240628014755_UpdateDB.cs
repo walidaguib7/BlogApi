@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace BlogApi.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDB : Migration
+    public partial class UpdateDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -215,7 +215,7 @@ namespace BlogApi.Migrations
                     Content = table.Column<string>(type: "longtext", nullable: false),
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    FilesId = table.Column<int>(type: "int", nullable: true)
+                    FilesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,7 +236,8 @@ namespace BlogApi.Migrations
                         name: "FK_posts_file_FilesId",
                         column: x => x.FilesId,
                         principalTable: "file",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -269,6 +270,31 @@ namespace BlogApi.Migrations
                         principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_comments_posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "likes",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_likes", x => new { x.UserId, x.PostId });
+                    table.ForeignKey(
+                        name: "FK_likes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_likes_posts_PostId",
                         column: x => x.PostId,
                         principalTable: "posts",
                         principalColumn: "Id",
@@ -334,6 +360,11 @@ namespace BlogApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_likes_PostId",
+                table: "likes",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_posts_CategoryId",
                 table: "posts",
                 column: "CategoryId");
@@ -369,6 +400,9 @@ namespace BlogApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "comments");
+
+            migrationBuilder.DropTable(
+                name: "likes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

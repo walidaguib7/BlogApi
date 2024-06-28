@@ -12,7 +12,6 @@ namespace BlogApi.Dtos.Comments
         [Required]
         public int PostId { get; set; }
 
-        public int? FilesId { get; set; }
 
     }
 }

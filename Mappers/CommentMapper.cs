@@ -1,22 +1,23 @@
 ﻿using BlogApi.Dtos.Comments;
 using BlogApi.Models;
 
+
 namespace BlogApi.Mappers
 {
     public static class CommentMapper
     {
         public static CommentDto ToCommentDto(this Comment comment)
         {
+
+           
             return new CommentDto
             {
                 Id = comment.Id,
                 Content = comment.Content,
                 CreatedAt = comment.CreatedAt,
-                UserId = comment.UserId,
-                PostId = comment.PostId,
                 UpdatedAt = comment.UpdatedAt,
                 userName = comment.user.UserName,
-                Image = comment.files.Image
+                UserId = comment.UserId
             };
         }
 
@@ -29,7 +30,7 @@ namespace BlogApi.Mappers
                 UpdatedAt = null,
                 UserId = commentDto.UserId,
                 PostId = commentDto.PostId,
-                FilesId = commentDto.FilesId,
+                
             };
         }
     }

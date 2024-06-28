@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240626012442_NewDB")]
-    partial class NewDB
+    [Migration("20240628025149_DBUpdate")]
+    partial class DBUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,21 @@ namespace BlogApi.Migrations
                     b.ToTable("file");
                 });
 
+            modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("likes");
+                });
+
             modelBuilder.Entity("BlogApi.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -102,7 +117,7 @@ namespace BlogApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("FilesId")
+                    b.Property<int>("FilesId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -358,6 +373,25 @@ namespace BlogApi.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
+                {
+                    b.HasOne("BlogApi.Models.Post", "posts")
+                        .WithMany("likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlogApi.Models.User", "users")
+                        .WithMany("likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("posts");
+
+                    b.Navigation("users");
+                });
+
             modelBuilder.Entity("BlogApi.Models.Post", b =>
                 {
                     b.HasOne("BlogApi.Models.Category", "category")
@@ -368,7 +402,9 @@ namespace BlogApi.Migrations
 
                     b.HasOne("BlogApi.Models.FilesModel", "files")
                         .WithMany()
-                        .HasForeignKey("FilesId");
+                        .HasForeignKey("FilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BlogApi.Models.User", "user")
                         .WithMany()
@@ -448,6 +484,13 @@ namespace BlogApi.Migrations
             modelBuilder.Entity("BlogApi.Models.Post", b =>
                 {
                     b.Navigation("comments");
+
+                    b.Navigation("likes");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.User", b =>
+                {
+                    b.Navigation("likes");
                 });
 #pragma warning restore 612, 618
         }

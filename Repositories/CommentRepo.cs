@@ -32,7 +32,7 @@ namespace BlogApi.Repositories
             return await  context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
-                .Include(c => c.files )
+                
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -41,7 +41,7 @@ namespace BlogApi.Repositories
             var comments = context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
-                .Include(c => c.files)
+                
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))
@@ -59,13 +59,13 @@ namespace BlogApi.Repositories
         public async Task<Comment?> UpdateComment(int id, UpdateCommentDto commentDto)
         {
             var comment = await context.comments
-                          .Include(c => c.user).Include(c => c.post).Include(c => c.files)
+                          .Include(c => c.user).Include(c => c.post)
                           .FirstOrDefaultAsync(c => c.Id == id);
             if (comment == null) return null;
 
             comment.Content = commentDto.Content;
             comment.UpdatedAt = DateTime.Today;
-            comment.FilesId = commentDto.FilesId;
+            
             await context.SaveChangesAsync();
             return comment;
         }

@@ -8,6 +8,5 @@ namespace BlogApi.Dtos.Comments
         [Required]
         public string Content { get; set; }
 
-        public int? FilesId { get; set; }
     }
 }

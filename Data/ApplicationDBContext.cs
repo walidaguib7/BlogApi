@@ -1,5 +1,4 @@
 ﻿using BlogApi.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,15 +15,30 @@ namespace BlogApi.Data
         public DbSet<Post> posts { get; set; }
         public DbSet<Comment> comments { get; set; }
 
+        public DbSet<LikesModel> likes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Comment>()
-                .HasOne(c => c.post)
-                .WithMany(c => c.comments)
-                .HasForeignKey(c => c.PostId);
+
+            modelBuilder.Entity<LikesModel>(l => l.HasKey(l => new {l.UserId,l.PostId}));
+
+            modelBuilder.Entity<LikesModel>()
+                .HasOne(l => l.posts)
+                .WithMany(l => l.likes)
+                .HasForeignKey(l => l.PostId);
+
+            modelBuilder.Entity<LikesModel>()
+                .HasOne(l => l.users)
+                .WithMany(l => l.likes)
+                .HasForeignKey(l => l.UserId);
+
+            
+
+
+
+            
         }
 
     }
