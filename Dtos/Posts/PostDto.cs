@@ -18,5 +18,9 @@ namespace BlogApi.Dtos.Posts
         public string Image { get; set; }
 
         public ICollection comments { get; set; } 
+
+        public ICollection likes { get; set; }
+
+        public int NumOfLikes { get; set; }
     }
 }

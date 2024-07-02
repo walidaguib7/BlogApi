@@ -33,6 +33,8 @@ namespace BlogApi.Repositories
                 .Include(p => p.user)
                 .Include(p => p.user.files)
                 .Include(p => p.files)
+                .Include(p => p.likes)
+                .Include(p => p.user.likes)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -42,7 +44,9 @@ namespace BlogApi.Repositories
                 .Include(p => p.user)
                 .Include(p => p.category)
                 .Include(p => p.user.files)
+                .Include(p => p.user.likes)
                 .Include(p => p.files)
+                .Include(p => p.likes)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(query.Title))
             {
