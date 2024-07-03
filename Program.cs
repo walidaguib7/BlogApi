@@ -60,6 +60,7 @@ builder.Services.AddScoped<ICategory, CategoryRepo>();
 builder.Services.AddScoped<IPost, PostRepo>();
 builder.Services.AddScoped<IComment, CommentRepo>();
 builder.Services.AddScoped<ILike, LikesRepo>();
+builder.Services.AddScoped<ICommentLikes, CommentLikesRepo>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -111,6 +112,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+//app.UseResponseCaching();
 app.UseHttpsRedirection();
 
 var fileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Images"));

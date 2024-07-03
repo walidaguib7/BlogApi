@@ -32,6 +32,7 @@ namespace BlogApi.Repositories
             return await  context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
+                .Include(c => c.commentLikes)
                 
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
@@ -41,7 +42,8 @@ namespace BlogApi.Repositories
             var comments = context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
-                
+                .Include(c => c.commentLikes)
+
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))

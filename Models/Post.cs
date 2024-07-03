@@ -22,5 +22,6 @@ namespace BlogApi.Models
         public ICollection<Comment> comments { get; set; } = [];
 
         public ICollection<LikesModel> likes { get; set; } = [];
+
     }
 }

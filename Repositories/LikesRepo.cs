@@ -8,10 +8,6 @@ namespace BlogApi.Repositories
     public class LikesRepo(ApplicationDBContext context) : ILike
     {
         private readonly ApplicationDBContext _context = context;
-        public async Task<LikesModel> GetLike(int postId , string userId)
-        {
-            return await _context.likes.Where(l => l.PostId == postId && l.UserId == userId).FirstAsync();
-        }
 
         public async Task<LikesModel> LikePost(LikesModel like)
         {

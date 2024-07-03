@@ -17,7 +17,9 @@ namespace BlogApi.Mappers
                 CreatedAt = comment.CreatedAt,
                 UpdatedAt = comment.UpdatedAt,
                 userName = comment.user.UserName,
-                UserId = comment.UserId
+                UserId = comment.UserId,
+                likes = comment.commentLikes.Select(c => c.ToLikeCommentDto()).ToList()
+                
             };
         }
 
@@ -30,6 +32,7 @@ namespace BlogApi.Mappers
                 UpdatedAt = null,
                 UserId = commentDto.UserId,
                 PostId = commentDto.PostId,
+                
                 
             };
         }

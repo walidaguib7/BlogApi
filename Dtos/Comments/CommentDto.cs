@@ -1,4 +1,5 @@
 ﻿using BlogApi.Models;
+using System.Collections;
 
 namespace BlogApi.Dtos.Comments
 {
@@ -12,9 +13,11 @@ namespace BlogApi.Dtos.Comments
 
         public string userName { get; set; }
 
+        public ICollection likes { get; set; }
 
-        
 
-        
+
+
+
     }
 }
