@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogApi.Dtos.User
 {
@@ -21,5 +22,7 @@ namespace BlogApi.Dtos.User
         public string Picture { get; set; }
 
         public string Token { get; set; }
+
+        public ICollection friends { get; set; }
     }
 }

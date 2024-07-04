@@ -17,6 +17,8 @@ namespace BlogApi.Models
 
         public ICollection<CommentLikes> commentLikes { get; set; } = [];
 
+        public ICollection<Friends> friends { get; set; } = [];
+
 
 
     }

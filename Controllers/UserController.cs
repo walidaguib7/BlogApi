@@ -86,7 +86,9 @@ namespace BlogApi.Controllers
                     last_name = user.last_name,
                     bio = user.bio ,
                     Picture = user.files.Image,
-                    PictureId = user.filesId
+                    PictureId = user.filesId,
+                    friends = user.friends.ToList()
+                    
                 });
         }
     }

@@ -96,6 +96,16 @@ namespace BlogApi.Migrations
                     b.ToTable("file");
                 });
 
+            modelBuilder.Entity("BlogApi.Models.Friends", b =>
+                {
+                    b.Property<string>("friendId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("friendId");
+
+                    b.ToTable("friends");
+                });
+
             modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
                 {
                     b.Property<string>("UserId")
@@ -393,6 +403,17 @@ namespace BlogApi.Migrations
                     b.Navigation("users");
                 });
 
+            modelBuilder.Entity("BlogApi.Models.Friends", b =>
+                {
+                    b.HasOne("BlogApi.Models.User", "friend")
+                        .WithMany("friends")
+                        .HasForeignKey("friendId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("friend");
+                });
+
             modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
                 {
                     b.HasOne("BlogApi.Models.Post", "posts")
@@ -516,6 +537,8 @@ namespace BlogApi.Migrations
             modelBuilder.Entity("BlogApi.Models.User", b =>
                 {
                     b.Navigation("commentLikes");
+
+                    b.Navigation("friends");
 
                     b.Navigation("likes");
                 });

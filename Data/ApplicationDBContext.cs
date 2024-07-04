@@ -18,6 +18,8 @@ namespace BlogApi.Data
         public DbSet<LikesModel> likes { get; set; }
 
         public DbSet<CommentLikes> commentLikes { get; set; }
+
+        public DbSet<Friends> friends { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -49,6 +51,16 @@ namespace BlogApi.Data
                 .HasOne(c => c.comments)
                 .WithMany(c => c.commentLikes)
                 .HasForeignKey(c => c.CommentId);
+
+
+            modelBuilder.Entity<Friends>(f => f.HasKey(f => new {  f.friendId }));
+
+            modelBuilder.Entity<Friends>()
+                .HasOne(f => f.friend)
+                .WithMany(f => f.friends)
+                .HasForeignKey(f => f.friendId);
+
+
 
 
 

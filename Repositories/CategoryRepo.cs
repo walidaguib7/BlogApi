@@ -15,6 +15,7 @@ namespace BlogApi.Repositories
         }
         public async Task<Category?> CreateCategory(Category category)
         {
+            
             await _context.category.AddAsync(category);
             await _context.SaveChangesAsync();
             return category;

@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace BlogApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateDB : Migration
+    public partial class All : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -206,6 +206,24 @@ namespace BlogApi.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "friends",
+                columns: table => new
+                {
+                    friendId = table.Column<string>(type: "varchar(255)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_friends", x => x.friendId);
+                    table.ForeignKey(
+                        name: "FK_friends_AspNetUsers_friendId",
+                        column: x => x.friendId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "posts",
                 columns: table => new
                 {
@@ -251,8 +269,7 @@ namespace BlogApi.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    FilesId = table.Column<int>(type: "int", nullable: true)
+                    PostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,11 +280,6 @@ namespace BlogApi.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_comments_file_FilesId",
-                        column: x => x.FilesId,
-                        principalTable: "file",
-                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_comments_posts_PostId",
                         column: x => x.PostId,
@@ -297,6 +309,31 @@ namespace BlogApi.Migrations
                         name: "FK_likes_posts_PostId",
                         column: x => x.PostId,
                         principalTable: "posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "commentLikes",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    CommentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_commentLikes", x => new { x.UserId, x.CommentId });
+                    table.ForeignKey(
+                        name: "FK_commentLikes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_commentLikes_comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "comments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -345,9 +382,9 @@ namespace BlogApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_comments_FilesId",
-                table: "comments",
-                column: "FilesId");
+                name: "IX_commentLikes_CommentId",
+                table: "commentLikes",
+                column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_comments_PostId",
@@ -399,13 +436,19 @@ namespace BlogApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "comments");
+                name: "commentLikes");
+
+            migrationBuilder.DropTable(
+                name: "friends");
 
             migrationBuilder.DropTable(
                 name: "likes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "comments");
 
             migrationBuilder.DropTable(
                 name: "posts");

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240628025149_DBUpdate")]
-    partial class DBUpdate
+    [Migration("20240704230338_All")]
+    partial class All
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,9 +50,6 @@ namespace BlogApi.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("FilesId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
@@ -65,13 +62,26 @@ namespace BlogApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FilesId");
-
                     b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("comments");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.CommentLikes", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("commentLikes");
                 });
 
             modelBuilder.Entity("BlogApi.Models.FilesModel", b =>
@@ -87,6 +97,16 @@ namespace BlogApi.Migrations
                     b.HasKey("id");
 
                     b.ToTable("file");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.Friends", b =>
+                {
+                    b.Property<string>("friendId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("friendId");
+
+                    b.ToTable("friends");
                 });
 
             modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
@@ -350,10 +370,6 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Models.Comment", b =>
                 {
-                    b.HasOne("BlogApi.Models.FilesModel", "files")
-                        .WithMany()
-                        .HasForeignKey("FilesId");
-
                     b.HasOne("BlogApi.Models.Post", "post")
                         .WithMany("comments")
                         .HasForeignKey("PostId")
@@ -366,11 +382,39 @@ namespace BlogApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("files");
-
                     b.Navigation("post");
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.CommentLikes", b =>
+                {
+                    b.HasOne("BlogApi.Models.Comment", "comments")
+                        .WithMany("commentLikes")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlogApi.Models.User", "users")
+                        .WithMany("commentLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("comments");
+
+                    b.Navigation("users");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.Friends", b =>
+                {
+                    b.HasOne("BlogApi.Models.User", "friend")
+                        .WithMany("friends")
+                        .HasForeignKey("friendId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("friend");
                 });
 
             modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
@@ -481,6 +525,11 @@ namespace BlogApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BlogApi.Models.Comment", b =>
+                {
+                    b.Navigation("commentLikes");
+                });
+
             modelBuilder.Entity("BlogApi.Models.Post", b =>
                 {
                     b.Navigation("comments");
@@ -490,6 +539,10 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Models.User", b =>
                 {
+                    b.Navigation("commentLikes");
+
+                    b.Navigation("friends");
+
                     b.Navigation("likes");
                 });
 #pragma warning restore 612, 618
