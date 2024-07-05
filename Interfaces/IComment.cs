@@ -6,7 +6,7 @@ namespace BlogApi.Interfaces
 {
     public interface IComment
     {
-        public Task<List<Comment>> GetComments(CommentQuery query);
+        public Task<ICollection<Comment>> GetComments();
         public Task<Comment?> GetComment(int id);
         public Task<Comment?> CreateComment(Comment comment);
 

@@ -8,18 +8,15 @@ namespace BlogApi.Mappers
     {
         public static CommentDto ToCommentDto(this Comment comment)
         {
-
-           
             return new CommentDto
             {
                 Id = comment.Id,
                 Content = comment.Content,
-                CreatedAt = comment.CreatedAt,
-                UpdatedAt = comment.UpdatedAt,
-                userName = comment.user.UserName,
+                UserName = comment.user.UserName,
+                ProfilePicture = comment.user.files.Image,
                 UserId = comment.UserId,
                 likes = comment.commentLikes.Select(c => c.ToLikeCommentDto()).ToList()
-                
+
             };
         }
 
@@ -28,8 +25,6 @@ namespace BlogApi.Mappers
             return new Comment
             {
                 Content = commentDto.Content,
-                CreatedAt = DateTime.Today,
-                UpdatedAt = null,
                 UserId = commentDto.UserId,
                 PostId = commentDto.PostId,
                 

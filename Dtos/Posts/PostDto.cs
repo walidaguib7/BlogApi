@@ -10,16 +10,14 @@ namespace BlogApi.Dtos.Posts
         public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public string username { get; set; }
+        public string username { get; set; } 
         public string userpicture { get; set; }
 
         public string CategoryTitle { get; set; }
 
         public string Image { get; set; }
 
-        public ICollection comments { get; set; } 
-
-        public ICollection likes { get; set; }
+        public required ICollection likes { get; set; } 
 
         public int NumOfLikes { get; set; }
     }

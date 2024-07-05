@@ -2,6 +2,7 @@
 using BlogApi.Dtos.Posts;
 using BlogApi.Helpers;
 using BlogApi.Interfaces;
+using BlogApi.Mappers;
 using BlogApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,23 +30,21 @@ namespace BlogApi.Repositories
         public async Task<Post?> GetPost(int id)
         {
             return await _context.posts.Include(p => p.comments)
-                .Include(p => p.category)
                 .Include(p => p.user)
                 .Include(p => p.user.files)
+                .Include(p => p.category)
                 .Include(p => p.files)
                 .Include(p => p.likes)
-                .Include(p => p.user.likes)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<List<Post>> GetPosts(PostQuery query)
         {
-            var posts =   _context.posts.Include(p => p.comments)
+            var posts = _context.posts
                 .Include(p => p.user)
                 .Include(p => p.category)
-                .Include(p => p.user.files)
-                .Include(p => p.user.likes)
                 .Include(p => p.files)
+                
                 .Include(p => p.likes)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(query.Title))
@@ -61,7 +60,8 @@ namespace BlogApi.Repositories
             }
 
             var skipNumber = (query.PageNumber - 1) * query.Limit;
-            return await posts.Skip(skipNumber).Take(query.Limit).ToListAsync();
+            return await posts.Skip(skipNumber).Take(query.Limit)
+                .ToListAsync();
         }
 
         public async Task<Post?> UpdatePost(int id, UpdatePostDto postDto)

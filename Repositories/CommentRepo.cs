@@ -29,33 +29,24 @@ namespace BlogApi.Repositories
 
         public async Task<Comment?> GetComment(int id)
         {
-            return await  context.comments
+            return await context.comments
                 .Include(c => c.user)
                 .Include(c => c.post)
                 .Include(c => c.commentLikes)
-                
+                .Include(c => c.user.files)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Comment>> GetComments(CommentQuery query)
+        public async Task<ICollection<Comment>> GetComments()
         {
-            var comments = context.comments
+            var comments = await context.comments
                 .Include(c => c.user)
+                .Include(c => c.user.files)
                 .Include(c => c.post)
                 .Include(c => c.commentLikes)
+                .ToListAsync();
 
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(query.SortBy))
-            {
-                if (query.SortBy.Equals("Id", StringComparison.OrdinalIgnoreCase))
-                {
-                    comments = query.IsDescending ? comments.OrderByDescending(s => s.Id) : comments.OrderBy(s => s.Id);
-                }
-            }
-
-            var skipNumber = (query.PageNumber - 1) * query.Limit;
-            return await comments.Skip(skipNumber).Take(query.Limit).ToListAsync();
+            return comments;
         }
 
         public async Task<Comment?> UpdateComment(int id, UpdateCommentDto commentDto)
@@ -66,7 +57,6 @@ namespace BlogApi.Repositories
             if (comment == null) return null;
 
             comment.Content = commentDto.Content;
-            comment.UpdatedAt = DateTime.Today;
             
             await context.SaveChangesAsync();
             return comment;

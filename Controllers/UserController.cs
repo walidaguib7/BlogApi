@@ -84,11 +84,10 @@ namespace BlogApi.Controllers
                     Token = _tokenService.CreateToken(user),
                     first_name = user.first_name,
                     last_name = user.last_name,
-                    bio = user.bio ,
+                    bio = user.bio,
                     Picture = user.files.Image,
                     PictureId = user.filesId,
-                    friends = user.friends.ToList()
-                    
+                    friends = user.friends.ToList() 
                 });
         }
     }

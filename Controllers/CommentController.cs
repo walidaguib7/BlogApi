@@ -14,9 +14,9 @@ namespace BlogApi.Controllers
         private readonly IComment _commentRepo = commentRepo;
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] CommentQuery query)
+        public async Task<IActionResult> GetAll()
         {
-            var comments = await _commentRepo.GetComments(query);
+            var comments = await _commentRepo.GetComments();
             var comment = comments.Select(c => c.ToCommentDto());
             return Ok(comment);
         }

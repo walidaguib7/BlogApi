@@ -16,7 +16,7 @@ namespace BlogApi.Mappers
                 CategoryTitle = post.category.Title,
                 userpicture = post.user.files.Image,
                 Image = post.files.Image,
-                comments = post.comments.Select(c => c.ToCommentDto()).ToList(),
+                
                 likes = post.likes.Select(l => l.ToLikeDto()).ToList(),
                 NumOfLikes = post.likes.ToList().Capacity
                 
