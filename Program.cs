@@ -22,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -61,7 +62,6 @@ builder.Services.AddScoped<IPost, PostRepo>();
 builder.Services.AddScoped<IComment, CommentRepo>();
 builder.Services.AddScoped<ILike, LikesRepo>();
 builder.Services.AddScoped<ICommentLikes, CommentLikesRepo>();
-builder.Services.AddScoped<IFriends, FriendRepo>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {

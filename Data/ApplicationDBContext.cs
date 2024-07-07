@@ -19,7 +19,11 @@ namespace BlogApi.Data
 
         public DbSet<CommentLikes> commentLikes { get; set; }
 
-        public DbSet<Friends> friends { get; set; }
+        public DbSet<UserFollower> followers { get; set; }
+
+        public DbSet<UserFollowing> following { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -53,14 +57,19 @@ namespace BlogApi.Data
                 .HasForeignKey(c => c.CommentId);
 
 
-            modelBuilder.Entity<Friends>(f => f.HasKey(f => new {  f.friendId }));
+            modelBuilder.Entity<UserFollower>(u => u.HasKey(u => new { u.UserId, u.FollowerId }));
 
-            modelBuilder.Entity<Friends>()
-                .HasOne(f => f.friend)
-                .WithMany(f => f.friends)
-                .HasForeignKey(f => f.friendId);
+            modelBuilder.Entity<UserFollowing>(u => u.HasKey(u => new {u.UserId , u.FollowingId}));
+            
+            modelBuilder.Entity<User>()
+                    .HasMany(u => u.followers)
+                    .WithOne(uf => uf.User)
+                    .HasForeignKey(uf => uf.UserId);
 
-
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.followings)
+                .WithOne(uf => uf.User)
+                .HasForeignKey(uf => uf.UserId);
 
 
 

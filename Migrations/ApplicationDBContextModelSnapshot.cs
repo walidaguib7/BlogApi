@@ -90,16 +90,6 @@ namespace BlogApi.Migrations
                     b.ToTable("file");
                 });
 
-            modelBuilder.Entity("BlogApi.Models.Friends", b =>
-                {
-                    b.Property<string>("friendId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("friendId");
-
-                    b.ToTable("friends");
-                });
-
             modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
                 {
                     b.Property<string>("UserId")
@@ -229,6 +219,36 @@ namespace BlogApi.Migrations
                     b.HasIndex("filesId");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("BlogApi.Models.UserFollower", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("FollowerId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("UserId", "FollowerId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("followers");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.UserFollowing", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("FollowingId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("UserId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("following");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -397,17 +417,6 @@ namespace BlogApi.Migrations
                     b.Navigation("users");
                 });
 
-            modelBuilder.Entity("BlogApi.Models.Friends", b =>
-                {
-                    b.HasOne("BlogApi.Models.User", "friend")
-                        .WithMany("friends")
-                        .HasForeignKey("friendId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("friend");
-                });
-
             modelBuilder.Entity("BlogApi.Models.LikesModel", b =>
                 {
                     b.HasOne("BlogApi.Models.Post", "posts")
@@ -463,6 +472,44 @@ namespace BlogApi.Migrations
                         .IsRequired();
 
                     b.Navigation("files");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.UserFollower", b =>
+                {
+                    b.HasOne("BlogApi.Models.User", "follower")
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlogApi.Models.User", "User")
+                        .WithMany("followers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("follower");
+                });
+
+            modelBuilder.Entity("BlogApi.Models.UserFollowing", b =>
+                {
+                    b.HasOne("BlogApi.Models.User", "following")
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlogApi.Models.User", "User")
+                        .WithMany("followings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("following");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -532,7 +579,9 @@ namespace BlogApi.Migrations
                 {
                     b.Navigation("commentLikes");
 
-                    b.Navigation("friends");
+                    b.Navigation("followers");
+
+                    b.Navigation("followings");
 
                     b.Navigation("likes");
                 });

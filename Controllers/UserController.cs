@@ -1,5 +1,6 @@
 ﻿using BlogApi.Dtos.User;
 using BlogApi.Interfaces;
+using BlogApi.Mappers;
 using BlogApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -70,7 +71,11 @@ namespace BlogApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var user = await userManager.Users.Include(u => u.files).FirstOrDefaultAsync(u => u.UserName == loginDto.Username);
+            var user = await userManager.Users.Include(u => u.files)
+                .Include(u => u.followings)
+                .Include(u => u.followers)
+
+                .FirstOrDefaultAsync(u => u.UserName == loginDto.Username);
             if (user == null) return Unauthorized("Invalid username");
             var result = await _manager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (!result.Succeeded) return Unauthorized("Username / Password wrong , re-try!");
@@ -87,8 +92,21 @@ namespace BlogApi.Controllers
                     bio = user.bio,
                     Picture = user.files.Image,
                     PictureId = user.filesId,
-                    friends = user.friends.ToList() 
-                });
+                    
+                }); ;
+        }
+
+
+        [HttpGet]
+        [Route("{userId}")]
+        public async Task<IActionResult> GetUser([FromRoute] string userId)
+        {
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+            var userDto = user.ToUserDto();
+            return Ok(userDto);
+
         }
     }
 }

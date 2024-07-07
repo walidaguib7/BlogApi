@@ -206,17 +206,49 @@ namespace BlogApi.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "friends",
+                name: "followers",
                 columns: table => new
                 {
-                    friendId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    FollowerId = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_friends", x => x.friendId);
+                    table.PrimaryKey("PK_followers", x => new { x.UserId, x.FollowerId });
                     table.ForeignKey(
-                        name: "FK_friends_AspNetUsers_friendId",
-                        column: x => x.friendId,
+                        name: "FK_followers_AspNetUsers_FollowerId",
+                        column: x => x.FollowerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_followers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "following",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    FollowingId = table.Column<string>(type: "varchar(255)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_following", x => new { x.UserId, x.FollowingId });
+                    table.ForeignKey(
+                        name: "FK_following_AspNetUsers_FollowingId",
+                        column: x => x.FollowingId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_following_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -266,8 +298,6 @@ namespace BlogApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(type: "longtext", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -397,6 +427,16 @@ namespace BlogApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_followers_FollowerId",
+                table: "followers",
+                column: "FollowerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_following_FollowingId",
+                table: "following",
+                column: "FollowingId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_likes_PostId",
                 table: "likes",
                 column: "PostId");
@@ -439,7 +479,10 @@ namespace BlogApi.Migrations
                 name: "commentLikes");
 
             migrationBuilder.DropTable(
-                name: "friends");
+                name: "followers");
+
+            migrationBuilder.DropTable(
+                name: "following");
 
             migrationBuilder.DropTable(
                 name: "likes");

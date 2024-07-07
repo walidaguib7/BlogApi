@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections;
+
 
 namespace BlogApi.Models
 {
@@ -8,18 +10,12 @@ namespace BlogApi.Models
         public string last_name { get; set; }
         public string bio { get; set; }
         public int  filesId { get; set; }
-
         public FilesModel files { get; set; }
-
-        
-
         public ICollection<LikesModel> likes { get; set; } = [];
-
         public ICollection<CommentLikes> commentLikes { get; set; } = [];
 
-        public ICollection<Friends> friends { get; set; } = [];
-
-
+        public ICollection<UserFollower> followers { get; set; } = [];
+        public ICollection<UserFollowing> followings { get; set; } = [];
 
     }
 }
