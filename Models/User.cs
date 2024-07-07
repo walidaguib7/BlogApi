@@ -12,10 +12,10 @@ namespace BlogApi.Models
         public int  filesId { get; set; }
         public FilesModel files { get; set; }
         public ICollection<LikesModel> likes { get; set; } = [];
+
         public ICollection<CommentLikes> commentLikes { get; set; } = [];
 
         public ICollection<UserFollower> followers { get; set; } = [];
-        public ICollection<UserFollowing> followings { get; set; } = [];
 
     }
 }

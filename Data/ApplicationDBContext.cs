@@ -21,7 +21,6 @@ namespace BlogApi.Data
 
         public DbSet<UserFollower> followers { get; set; }
 
-        public DbSet<UserFollowing> following { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -59,17 +58,14 @@ namespace BlogApi.Data
 
             modelBuilder.Entity<UserFollower>(u => u.HasKey(u => new { u.UserId, u.FollowerId }));
 
-            modelBuilder.Entity<UserFollowing>(u => u.HasKey(u => new {u.UserId , u.FollowingId}));
+
             
             modelBuilder.Entity<User>()
                     .HasMany(u => u.followers)
                     .WithOne(uf => uf.User)
                     .HasForeignKey(uf => uf.UserId);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.followings)
-                .WithOne(uf => uf.User)
-                .HasForeignKey(uf => uf.UserId);
+
 
 
 

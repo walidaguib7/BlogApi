@@ -15,7 +15,7 @@ namespace BlogApi.Mappers
                 UserName = comment.user.UserName,
                 ProfilePicture = comment.user.files.Image,
                 UserId = comment.UserId,
-                likes = comment.commentLikes.Select(c => c.ToLikeCommentDto()).ToList()
+                likes = comment.commentLikes.Select(cl => cl.ToLikeCommentDto()).ToList()
 
             };
         }

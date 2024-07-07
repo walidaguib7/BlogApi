@@ -25,6 +25,5 @@ namespace BlogApi.Dtos.User
         public string Token { get; set; }
 
         public ICollection<UserFollower> followers { get; set; }
-        public ICollection<UserFollowing> followings { get; set; }
     }
 }

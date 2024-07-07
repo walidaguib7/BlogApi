@@ -2,12 +2,12 @@
 
 namespace BlogApi.Dtos.Followers
 {
-    public class FollowingDto
+    public class CreateFollowDto
     {
         [Required]
-        public string followerId { get; set; }
+        public string userId { get; set; }
 
         [Required]
-        public string followingId { get; set; }
+        public string followerId { get; set; }
     }
 }

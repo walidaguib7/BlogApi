@@ -72,7 +72,7 @@ namespace BlogApi.Controllers
                 return BadRequest(ModelState);
             }
             var user = await userManager.Users.Include(u => u.files)
-                .Include(u => u.followings)
+                
                 .Include(u => u.followers)
 
                 .FirstOrDefaultAsync(u => u.UserName == loginDto.Username);
