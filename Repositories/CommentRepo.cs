@@ -34,6 +34,7 @@ namespace BlogApi.Repositories
                 .Include(c => c.post)
                 .Include(c => c.commentLikes)
                 .Include(c => c.user.files)
+                .Include(c => c.replies)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -44,6 +45,7 @@ namespace BlogApi.Repositories
                 .Include(c => c.user.files)
                 .Include(c => c.post)
                 .Include(c => c.commentLikes)
+                .Include(c => c.replies)
                 .ToListAsync();
 
             return comments;

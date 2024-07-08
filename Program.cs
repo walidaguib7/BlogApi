@@ -63,6 +63,7 @@ builder.Services.AddScoped<IComment, CommentRepo>();
 builder.Services.AddScoped<ILike, LikesRepo>();
 builder.Services.AddScoped<ICommentLikes, CommentLikesRepo>();
 builder.Services.AddScoped<IFollow , FollowingRepo>();
+builder.Services.AddScoped<IReply, RepliesRepo>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {

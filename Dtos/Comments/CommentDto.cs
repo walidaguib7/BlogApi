@@ -14,5 +14,7 @@ namespace BlogApi.Dtos.Comments
         public string ProfilePicture { get; set; }
 
         public ICollection likes { get; set; }
+
+        public ICollection replies { get; set; }
     }
 }

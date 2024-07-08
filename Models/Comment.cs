@@ -14,6 +14,8 @@
 
         public ICollection<CommentLikes> commentLikes { get; set; } = [];
 
+        public ICollection<Replies> replies { get; set; } = [];
+
 
     }
 }
