@@ -1,6 +1,7 @@
 ﻿using BlogApi.Dtos.Blocking;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers
@@ -13,6 +14,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetBlockedUsers([FromRoute] string userId)
         {
             var users = await blockedUserRepo.GetBlockedUsers(userId);
@@ -21,6 +23,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> BlockUser([FromBody] CreateBlockedUser blockedUser)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -30,6 +33,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("{userId}/{blockedId}")]
         public async Task<IActionResult> UnBlock( string userId , string blockedId)
         {

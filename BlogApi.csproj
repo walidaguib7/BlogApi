@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <Folder Include="Hub\" />
+	  <Folder Include="Images\"/>
   </ItemGroup>
 
 </Project>

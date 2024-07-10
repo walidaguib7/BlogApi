@@ -100,6 +100,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddSignalR();
+
 builder.Services.AddDirectoryBrowser();
 
 

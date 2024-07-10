@@ -1,6 +1,7 @@
 ﻿using BlogApi.Dtos.Replies;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace BlogApi.Controllers
         private readonly IReply _replyRepo = replyRepo;
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetReplies()
         {
             var replies = await _replyRepo.GetReplies();
@@ -21,6 +23,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostReply([FromBody] CreateReplyDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -31,6 +34,7 @@ namespace BlogApi.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> UpdateReply([FromRoute] int id , [FromBody] UpdateReplyDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -41,6 +45,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteReply([FromRoute] int id)
         {
             await _replyRepo.DeleteReply(id);

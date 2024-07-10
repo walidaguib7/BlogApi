@@ -2,6 +2,7 @@
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using BlogApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace BlogApi.Controllers
         private readonly IComment _commentRepo = commentRepo;
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> LikeComment([FromBody] LikeCommentDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -39,6 +41,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{id:int}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> UnlikeComment([FromRoute] int id , string userId)
         {
             await _commentLikesRepo.UnlikeComment(userId, id);

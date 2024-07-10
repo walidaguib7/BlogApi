@@ -1,4 +1,5 @@
 ﻿using BlogApi.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> UploadFiles(IFormFile file)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

@@ -2,6 +2,7 @@
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using BlogApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -71,8 +72,8 @@ namespace BlogApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var user = await userManager.Users.Include(u => u.files)
-                
+            var user = await userManager.Users
+                .Include(u => u.files)
                 .Include(u => u.followers)
 
                 .FirstOrDefaultAsync(u => u.UserName == loginDto.Username);
@@ -99,10 +100,14 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetUser([FromRoute] string userId)
         {
 
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.Users
+                
+                .Include(u => u.files)
+                .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null) return NotFound();
             var userDto = user.ToUserDto();
             return Ok(userDto);
