@@ -23,6 +23,8 @@ namespace BlogApi.Data
 
         public DbSet<Replies> replies { get; set; }
 
+        public DbSet<BlockedUsers> blockedUsers { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,6 +66,15 @@ namespace BlogApi.Data
                     .HasMany(u => u.followers)
                     .WithOne(uf => uf.User)
                     .HasForeignKey(uf => uf.UserId);
+
+            modelBuilder.Entity<BlockedUsers>
+                (bu => bu.HasKey(bu => new {bu.userId , bu.blockedUserId}));
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.blockedUsers)
+                .WithOne(u => u.user)
+                .HasForeignKey(u => u.userId);
+
 
 
 

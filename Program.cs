@@ -64,6 +64,7 @@ builder.Services.AddScoped<ILike, LikesRepo>();
 builder.Services.AddScoped<ICommentLikes, CommentLikesRepo>();
 builder.Services.AddScoped<IFollow , FollowingRepo>();
 builder.Services.AddScoped<IReply, RepliesRepo>();
+builder.Services.AddScoped<IBlockedUser, BlockedUserRepo>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {

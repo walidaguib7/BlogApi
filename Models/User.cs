@@ -17,5 +17,7 @@ namespace BlogApi.Models
 
         public ICollection<UserFollower> followers { get; set; } = [];
 
+        public ICollection<BlockedUsers> blockedUsers { get; set; } = [];
+
     }
 }

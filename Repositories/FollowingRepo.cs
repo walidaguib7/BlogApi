@@ -17,7 +17,7 @@ namespace BlogApi.Repositories
             return follow;
         }
 
-        public Task<UserFollower> GetFollow(string userId, string followerId)
+        public Task<UserFollower?> GetFollow(string userId, string followerId)
         {
             return _context.followers
                 .Where(u => u.UserId == userId && u.FollowerId == followerId)
