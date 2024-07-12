@@ -12,11 +12,18 @@ namespace BlogApi.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> manager) : ControllerBase
+    public class UserController(
+    UserManager<User> userManager,
+    ITokenService tokenService,
+    SignInManager<User> signInManager
+    
+) : ControllerBase
     {
-        private readonly UserManager<User> userManager = userManager;
+        private readonly UserManager<User> _userManager = userManager;
         private readonly ITokenService _tokenService = tokenService;
-        private readonly SignInManager<User> _manager = manager;
+        private readonly SignInManager<User> _signInManager = signInManager;
+        
+
 
 
         [HttpPost]
@@ -78,7 +85,7 @@ namespace BlogApi.Controllers
 
                 .FirstOrDefaultAsync(u => u.UserName == loginDto.Username);
             if (user == null) return Unauthorized("Invalid username");
-            var result = await _manager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (!result.Succeeded) return Unauthorized("Username / Password wrong , re-try!");
 
             return Ok(
@@ -112,6 +119,40 @@ namespace BlogApi.Controllers
             var userDto = user.ToUserDto();
             return Ok(userDto);
 
+        }
+
+        [HttpPut]
+        [Route("ResetPassword/{userId}")]
+        
+        public async Task<IActionResult> UpdatePassword([FromRoute] string userId , [FromBody] UpdatePasswordDto passwordDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+            
+            var result = await userManager.ResetPasswordAsync(user, passwordDto.Token, passwordDto.NewPassword);
+            await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok("Password reset successfully!");
+            }else
+            {
+                return StatusCode(400);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("ForgotPassword/{userId}")]
+        public async Task<IActionResult> ForgotPassword([FromRoute] string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+            
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            
+            
+            return Ok(token);
         }
     }
 }

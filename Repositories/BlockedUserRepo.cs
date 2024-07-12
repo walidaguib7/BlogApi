@@ -1,4 +1,5 @@
 ﻿using BlogApi.Data;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,6 @@ namespace BlogApi.Repositories
         private readonly IFollow followRepo = _followRepo;
         public async Task<BlockedUsers> BlockUser(BlockedUsers user)
         {
-            
-            
-            
-
             try 
             {
                 // the user I follow
@@ -57,13 +54,22 @@ namespace BlogApi.Repositories
 
         }
 
-        public async Task<List<BlockedUsers>> GetBlockedUsers(string id)
+        public async Task<List<BlockedUsers>> GetBlockedUsers(string id , UsersQuery query)
         {
-            return await _context.blockedUsers
+            var users =  _context.blockedUsers
                 .Include(b => b.blockedUser)
                 .Include(b => b.blockedUser.files)
                 .Where(b => b.userId == id)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(query.Username))
+            {
+                users =  users.Where(u => u.blockedUser.UserName.Contains(query.Username));
+            }
+            var skipNumber = (query.PageNumber - 1) * query.Limit;
+            return await users.Skip(skipNumber).Take(query.Limit)
                 .ToListAsync();
+
         }
 
         public async Task<BlockedUsers?> UnBlockUser(string id , string blockedId)

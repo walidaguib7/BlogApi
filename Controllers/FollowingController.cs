@@ -1,4 +1,5 @@
 ﻿using BlogApi.Dtos.Followers;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -14,21 +15,21 @@ namespace BlogApi.Controllers
 
 
         [HttpGet]
-        [Route("{userId}")]
+        [Route("followers/{userId}")]
         [Authorize]
-        public async Task<IActionResult> GetFollowers([FromRoute] string userId)
+        public async Task<IActionResult> GetFollowers([FromRoute] string userId , [FromQuery] UsersQuery query)
         {
-            var followers = await _followRepo.GetFollowers(userId);
+            var followers = await _followRepo.GetFollowers(userId , query);
             var followersDto = followers.Select(f => f.ToFollowerDto());
             return Ok(followersDto);
         }
 
         [HttpGet]
-        [Route("following/{MyUser}")]
+        [Route("followings/{MyUser}")]
         [Authorize]
-        public async Task<IActionResult> GetFollowings([FromRoute] string MyUser)
+        public async Task<IActionResult> GetFollowings([FromRoute] string MyUser , [FromQuery] UsersQuery query)
         {
-            var followings = await _followRepo.GetFollowings(MyUser);
+            var followings = await _followRepo.GetFollowings(MyUser , query);
             var followingsDto = followings.Select(f => f.ToFollowingDto());
             return Ok(followingsDto);
         }

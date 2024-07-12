@@ -1,4 +1,5 @@
 ﻿using BlogApi.Data;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -24,20 +25,39 @@ namespace BlogApi.Repositories
                 .FirstAsync();
         }
 
-        public async Task<List<UserFollower>> GetFollowers(string userId)
+        public async Task<List<UserFollower>> GetFollowers(string userId , UsersQuery query)
         {
-            return await _context.followers
+            var followers = _context.followers
                 .Include(u => u.follower)
                 .Include(u => u.follower.files)
-                .Where(u => u.UserId == userId).ToListAsync();
+                .Where(u => u.UserId == userId).AsQueryable();
+
+            if (!string.IsNullOrEmpty(query.Username) || !string.IsNullOrWhiteSpace(query.Username)) 
+            {
+                followers = followers.Where(f => f.follower.UserName.Contains(query.Username));
+            }
+            var skipNumber = (query.PageNumber - 1) * query.Limit;
+            return await followers.Skip(skipNumber).Take(query.Limit)
+                .ToListAsync();
         }
 
-        public async Task<List<UserFollower>> GetFollowings(string userId)
+        public async Task<List<UserFollower>> GetFollowings(string userId , UsersQuery query)
         {
-            return await _context.followers
+            var following =  _context.followers
                 .Include(u => u.User)
                 .Include(u => u.User.files)
-                .Where(u => u.FollowerId == userId).ToListAsync();
+                .Where(u => u.FollowerId == userId).AsQueryable();
+
+            if (!string.IsNullOrEmpty(query.Username) || !string.IsNullOrWhiteSpace(query.Username))
+            {
+                following = following.Where(f => f.User.UserName.Contains(query.Username));
+            }
+
+            var skipNumber = (query.PageNumber - 1) * query.Limit;
+            return await following.Skip(skipNumber).Take(query.Limit)
+                .ToListAsync();
+
+
         }
 
         public async Task<UserFollower> UnFollow(string userId, string target)

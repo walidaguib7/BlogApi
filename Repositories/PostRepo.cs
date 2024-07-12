@@ -56,6 +56,11 @@ namespace BlogApi.Repositories
                 {
                     posts = query.IsDescending ? posts.OrderByDescending(s => s.Title) : posts.OrderBy(s => s.Title);
                 }
+                if(query.SortBy.Equals("likes", StringComparison.OrdinalIgnoreCase))
+                {
+                    posts = query.IsDescending ? 
+                        posts.OrderByDescending(s => s.likes.Count) : posts.OrderBy(s => s.likes.Count);
+                }
             }
 
             var skipNumber = (query.PageNumber - 1) * query.Limit;

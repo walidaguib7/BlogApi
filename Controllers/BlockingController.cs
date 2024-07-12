@@ -1,4 +1,5 @@
 ﻿using BlogApi.Dtos.Blocking;
+using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -15,9 +16,9 @@ namespace BlogApi.Controllers
         [HttpGet]
         [Route("{userId}")]
         [Authorize]
-        public async Task<IActionResult> GetBlockedUsers([FromRoute] string userId)
+        public async Task<IActionResult> GetBlockedUsers([FromRoute] string userId, [FromQuery] UsersQuery query)
         {
-            var users = await blockedUserRepo.GetBlockedUsers(userId);
+            var users = await blockedUserRepo.GetBlockedUsers(userId , query);
             var usersDto = users.Select(u => u.ToBlockedUserDto());
             return Ok(usersDto);
         }
