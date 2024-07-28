@@ -62,10 +62,7 @@ namespace BlogApi.Repositories
                 .Where(b => b.userId == id)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(query.Username))
-            {
-                users =  users.Where(u => u.blockedUser.UserName.Contains(query.Username));
-            }
+            
             var skipNumber = (query.PageNumber - 1) * query.Limit;
             return await users.Skip(skipNumber).Take(query.Limit)
                 .ToListAsync();

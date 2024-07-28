@@ -15,7 +15,7 @@ namespace BlogApi.Controllers
         private readonly IComment _commentRepo = commentRepo;
 
         [HttpGet]
-        [Authorize]
+        
         public async Task<IActionResult> GetAll()
         {
             var comments = await _commentRepo.GetComments();
@@ -25,7 +25,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> FindComment([FromRoute] int id)
         {
             var comment = await _commentRepo.GetComment(id);
@@ -34,7 +34,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentDto commentDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -45,7 +45,7 @@ namespace BlogApi.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> UpdateComment([FromRoute] int id , [FromBody] UpdateCommentDto commentDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -56,7 +56,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> DeleteComment([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

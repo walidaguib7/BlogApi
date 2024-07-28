@@ -16,7 +16,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> UploadFiles(IFormFile file)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

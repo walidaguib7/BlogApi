@@ -16,7 +16,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("followers/{userId}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetFollowers([FromRoute] string userId , [FromQuery] UsersQuery query)
         {
             var followers = await _followRepo.GetFollowers(userId , query);
@@ -26,7 +26,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("followings/{MyUser}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetFollowings([FromRoute] string MyUser , [FromQuery] UsersQuery query)
         {
             var followings = await _followRepo.GetFollowings(MyUser , query);
@@ -37,7 +37,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{user}/{followId}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetFollow(string user , string followId)
         {
             var MyUser = await _followRepo.GetFollow(user, followId);
@@ -48,7 +48,7 @@ namespace BlogApi.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> FollowUser([FromBody] CreateFollowDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -59,7 +59,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{MyUserId}/{targetId}")]
-        [Authorize]
+        
         public async Task<IActionResult> UnFollow(string MyUserId , string targetId)
         {
             var model = await _followRepo.UnFollow(MyUserId, targetId);

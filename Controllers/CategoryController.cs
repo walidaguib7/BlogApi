@@ -15,7 +15,7 @@ namespace BlogApi.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        
         public async Task<IActionResult> GetCategories()
         {
            
@@ -26,7 +26,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetCategory([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -36,7 +36,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto categoryDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -48,7 +48,7 @@ namespace BlogApi.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryDto categoryDto , [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -60,7 +60,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> DeleteCategory([FromRoute] int id) 
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

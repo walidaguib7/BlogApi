@@ -1,4 +1,5 @@
 using BlogApi.Data;
+using BlogApi.Hubs;
 using BlogApi.Interfaces;
 using BlogApi.Models;
 using BlogApi.Repositories;
@@ -122,8 +123,8 @@ if (app.Environment.IsDevelopment())
 }
 
 
-//app.UseResponseCaching();
-app.UseHttpsRedirection();
+
+
 
 var fileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Images"));
 var requestPath = "/Images";
@@ -141,8 +142,16 @@ app.UseDirectoryBrowser(new DirectoryBrowserOptions
     RequestPath = requestPath
 });
 
+//app.UseResponseCaching();
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
+
+
+app.MapHub<PostNotifications>("/Hub");
 
 app.Run();

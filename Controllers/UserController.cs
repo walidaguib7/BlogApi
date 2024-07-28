@@ -1,4 +1,5 @@
 ﻿using BlogApi.Dtos.User;
+using BlogApi.Hubs;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
 using BlogApi.Models;
@@ -88,6 +89,8 @@ namespace BlogApi.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (!result.Succeeded) return Unauthorized("Username / Password wrong , re-try!");
 
+            
+
             return Ok(
                 new NewUser
                 {
@@ -107,12 +110,11 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetUser([FromRoute] string userId)
         {
 
             var user = await userManager.Users
-                
                 .Include(u => u.files)
                 .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null) return NotFound();

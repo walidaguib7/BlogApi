@@ -20,7 +20,7 @@ namespace BlogApi.Controllers
         private readonly IPost postRepo = _postRepo;
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> LikePost([FromBody] LikePostDto postDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -39,7 +39,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{id:int}/{userId}")]
-        [Authorize]
+        
         public async Task<IActionResult> UnLike([FromRoute] int id , string userId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

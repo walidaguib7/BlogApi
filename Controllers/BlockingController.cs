@@ -15,7 +15,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetBlockedUsers([FromRoute] string userId, [FromQuery] UsersQuery query)
         {
             var users = await blockedUserRepo.GetBlockedUsers(userId , query);
@@ -24,7 +24,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> BlockUser([FromBody] CreateBlockedUser blockedUser)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -34,7 +34,7 @@ namespace BlogApi.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        
         [Route("{userId}/{blockedId}")]
         public async Task<IActionResult> UnBlock( string userId , string blockedId)
         {

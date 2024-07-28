@@ -2,7 +2,7 @@
 using BlogApi.Helpers;
 using BlogApi.Interfaces;
 using BlogApi.Mappers;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Controllers
@@ -12,9 +12,10 @@ namespace BlogApi.Controllers
     public class PostController(IPost postRepo) : ControllerBase
     {
         private readonly IPost _postRepo = postRepo;
+        
 
         [HttpGet]
-        [Authorize]
+        
         public async Task<IActionResult> GetPosts([FromQuery] PostQuery query)
         {
             var posts = await _postRepo.GetPosts(query);
@@ -24,7 +25,7 @@ namespace BlogApi.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> GetPost([FromRoute] int id)
         {
             var post = await _postRepo.GetPost(id);
@@ -33,18 +34,19 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> CreatePost([FromBody] CreatePostDto postDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var post = postDto.ToPostModel();
              await _postRepo.CreatePost(post);
+            
             return StatusCode(200, "Post created successfully!");
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> UpdatePost([FromBody] UpdatePostDto postDto , [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -55,7 +57,7 @@ namespace BlogApi.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize]
+        
         public async Task<IActionResult> DeletePost([FromRoute] int id)
         {
             await _postRepo.DeletePost(id);
